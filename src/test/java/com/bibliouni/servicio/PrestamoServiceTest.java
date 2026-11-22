@@ -72,4 +72,19 @@ class PrestamoServiceTest {
         // Assert
         assertEquals(6000.0, multa);
     }
+
+@Test
+    void deberiaRechazarPrestamoCuandoUsuarioTieneTresPrestamosActivos() {
+        // Arrange
+        Long usuarioId = 1L;
+        Long materialId = 10L;
+        Material materialDisponible = new Material(materialId, "Clean Architecture", true);
+        when(materialRepository.findById(materialId)).thenReturn(Optional.of(materialDisponible));
+        when(prestamoRepository.countByUsuarioId(usuarioId)).thenReturn(3L);
+
+        // Act & Assert
+        assertThrows(IllegalStateException.class,
+                () -> prestamoService.registrarPrestamo(usuarioId, materialId));
+        verify(prestamoRepository, never()).save(any());
+    }
 }
