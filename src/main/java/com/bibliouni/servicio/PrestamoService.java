@@ -39,9 +39,13 @@ public class PrestamoService {
     }
 
     public double calcularMulta(int diasRetraso) {
+        validarDiasRetraso(diasRetraso);
+        return diasRetraso * TARIFA_MULTA_POR_DIA;
+    }
+
+    private void validarDiasRetraso(int diasRetraso) {
         if (diasRetraso < 0) {
             throw new IllegalArgumentException("Los días de retraso no pueden ser negativos");
         }
-        return diasRetraso * TARIFA_MULTA_POR_DIA;
     }
 }
