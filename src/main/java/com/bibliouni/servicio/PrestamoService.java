@@ -8,6 +8,7 @@ import com.bibliouni.repositorio.PrestamoRepository;
 public class PrestamoService {
 
     private static final double TARIFA_MULTA_POR_DIA = 2000.0;
+    private static final int LIMITE_PRESTAMOS_ACTIVOS = 3;
 
     private final PrestamoRepository prestamoRepository;
     private final MaterialRepository materialRepository;
@@ -24,12 +25,17 @@ public class PrestamoService {
         if (!material.isDisponible()) {
             throw new IllegalStateException("El material no está disponible");
         }
-        if (prestamoRepository.countByUsuarioId(usuarioId) >= 3) {
-            throw new IllegalStateException("El usuario ha alcanzado el límite máximo de 3 préstamos activos");
-        }
+        
+            validarLimitePrestamosActivos(usuarioId);
+        
 
         Prestamo prestamo = new Prestamo(null, usuarioId, materialId);
         return prestamoRepository.save(prestamo);
+    }
+    private void validarLimitePrestamosActivos(Long usuarioId) {
+        if (prestamoRepository.countByUsuarioId(usuarioId) >= LIMITE_PRESTAMOS_ACTIVOS) {
+            throw new IllegalStateException("El usuario ha alcanzado el límite máximo de 3 préstamos activos");
+        }
     }
 
     public double calcularMulta(int diasRetraso) {
