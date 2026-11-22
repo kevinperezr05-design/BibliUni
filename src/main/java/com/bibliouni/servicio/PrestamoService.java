@@ -24,6 +24,9 @@ public class PrestamoService {
         if (!material.isDisponible()) {
             throw new IllegalStateException("El material no está disponible");
         }
+        if (prestamoRepository.countByUsuarioId(usuarioId) >= 3) {
+            throw new IllegalStateException("El usuario ha alcanzado el límite máximo de 3 préstamos activos");
+        }
 
         Prestamo prestamo = new Prestamo(null, usuarioId, materialId);
         return prestamoRepository.save(prestamo);
