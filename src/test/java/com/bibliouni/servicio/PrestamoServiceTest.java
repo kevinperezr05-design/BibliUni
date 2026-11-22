@@ -96,4 +96,15 @@ class PrestamoServiceTest {
         assertThrows(IllegalArgumentException.class,
                 () -> prestamoService.calcularMulta(diasRetraso));
     }
+    @Test
+    void deberiaRetornarCeroCuandoDiasDeRetrasoEsCero() {
+        // Arrange
+        int diasRetraso = 0;
+
+        // Act
+        double multa = prestamoService.calcularMulta(diasRetraso);
+
+        // Assert
+        assertEquals(0.0, multa);
+    }
 }
