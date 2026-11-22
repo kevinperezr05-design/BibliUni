@@ -87,4 +87,13 @@ class PrestamoServiceTest {
                 () -> prestamoService.registrarPrestamo(usuarioId, materialId));
         verify(prestamoRepository, never()).save(any());
     }
+    @Test
+    void deberiaLanzarExcepcionCuandoDiasDeRetrasoSonNegativos() {
+        // Arrange
+        int diasRetraso = -2;
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class,
+                () -> prestamoService.calcularMulta(diasRetraso));
+    }
 }
